@@ -85,7 +85,7 @@ for conf in candidate_config_list :
     #inputs = Input(shape=(conf.IMG_HEIGHT, conf.IMG_WIDTH, 3,))
     model.build(input_shape=(conf.BATCH_SIZE,conf.IMG_HEIGHT, conf.IMG_WIDTH, 3))
     model.summary()
-    model.load_weights("model_cmp719_senet"+'.h5')
+    #model.load_weights("model_cmp719_senet"+'.h5')
     print("Loaded model from disk")
     
     STEP_SIZE_TRAIN=train_generator.n//(train_generator.batch_size)
@@ -114,7 +114,7 @@ for conf in candidate_config_list :
     print("Test Loss:{}".format(scores[0]))
     print("Test Accuracy:{}".format(scores[1]))
     #save_model(model, log_dir + "model_cmp719_senet")
-    model.save_weights("model_cmp719_senet"+'.h5')
+    model.save_weights(log_dir+"model_cmp719_senet"+'.h5')
     print("Saved model to disk")
 
     #Evaluate trained model

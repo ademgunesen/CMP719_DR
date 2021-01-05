@@ -131,3 +131,4 @@ dmypy.json
 #vivente custom objects
 computer_info.json
 out/
+.vscode
