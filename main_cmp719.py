@@ -29,7 +29,7 @@ X_train = fold_df[fold_df['fold_0'] == 'train']
 X_valid = fold_df[fold_df['fold_0'] == 'validation']
 
 candidate_config_list = []
-candidate_config_list.append(train_config(name = "cmp719_senet", IMG_HEIGHT = 256, IMG_WIDTH = 256, BATCH_SIZE = 4, EPOCHS=30))
+candidate_config_list.append(train_config(name = "cmp719_senet", IMG_HEIGHT = 256, IMG_WIDTH = 256, BATCH_SIZE = 4, EPOCHS=10))
 
 
 for conf in candidate_config_list : 
