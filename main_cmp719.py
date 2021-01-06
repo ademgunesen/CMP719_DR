@@ -23,7 +23,7 @@ train_dest_path=comp_info["Datasets"]+'APTOS_Adems'
 valid_dest_path=comp_info["Datasets"]+'APTOS_Adems'
 test_dest_path='Not defined'
 seed = 1
-fold_df = pd.read_csv(comp_info["Datasets"]+'DR/label2.csv')
+fold_df = pd.read_csv(comp_info["Datasets"]+'label2.csv')
 fold_df['diagnosis'] = fold_df['diagnosis'].astype('str')
 X_train = fold_df[fold_df['fold_0'] == 'train']
 X_valid = fold_df[fold_df['fold_0'] == 'validation']
