@@ -313,3 +313,5 @@ def get_computer_info():
     computer_info = json.load(f) 
     print("Working on "+computer_info['name'])
     return computer_info
+
+get_computer_info()
