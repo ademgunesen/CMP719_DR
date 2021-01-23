@@ -23,13 +23,62 @@ train_dest_path=comp_info["Datasets"]+'APTOS_Adems'
 valid_dest_path=comp_info["Datasets"]+'APTOS_Adems'
 test_dest_path='Not defined'
 seed = 1
-fold_df = pd.read_csv(comp_info["Datasets"]+'label2.csv')
+
+fold_df = pd.read_csv(comp_info["Datasets"]+'trainLabels15.csv')
 fold_df['diagnosis'] = fold_df['diagnosis'].astype('str')
+
+fold_df_19 = pd.read_csv(comp_info["Datasets"]+'label.csv')
+fold_df_19['diagnosis'] = fold_df_19['diagnosis'].astype('str')
+fold_df_19 = fold_df_19[fold_df_19['data'] == 'new']
+
 X_train = fold_df[fold_df['fold_0'] == 'train']
 X_valid = fold_df[fold_df['fold_0'] == 'validation']
+X_train_1 = pd.DataFrame(X_train[X_train['diagnosis'] == '1'])
+X_valid_1 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '1'])
+X_train_3 = X_train[X_train['diagnosis'] == '3']
+X_valid_3 = X_valid[X_valid['diagnosis'] == '3']
+X_train_4 = X_train[X_train['diagnosis'] == '4']
+X_valid_4 = X_valid[X_valid['diagnosis'] == '4']
+
+X_train = X_train.append(X_train_1, ignore_index=True)
+X_train = X_train.append(X_train_1, ignore_index=True)
+X_train = X_train.append(X_train_1, ignore_index=True)
+X_train = X_train.append(X_train_1, ignore_index=True)
+X_train = X_train.append(X_train_1, ignore_index=True)
+X_train = X_train.append(X_train_3, ignore_index=True)
+X_train = X_train.append(X_train_3, ignore_index=True)
+X_train = X_train.append(X_train_3, ignore_index=True)
+X_train = X_train.append(X_train_4, ignore_index=True)
+X_train = X_train.append(X_train_4, ignore_index=True)
+X_train = X_train.append(X_train_4, ignore_index=True)
+X_train = X_train.append(fold_df_19, ignore_index=True)
+
+X_valid = X_valid.append(X_valid_1, ignore_index=True)
+X_valid = X_valid.append(X_valid_1, ignore_index=True)
+X_valid = X_valid.append(X_valid_1, ignore_index=True)
+X_valid = X_valid.append(X_valid_1, ignore_index=True)
+X_valid = X_valid.append(X_valid_1, ignore_index=True)
+X_valid = X_valid.append(X_valid_3, ignore_index=True)
+X_valid = X_valid.append(X_valid_3, ignore_index=True)
+X_valid = X_valid.append(X_valid_3, ignore_index=True)
+X_valid = X_valid.append(X_valid_4, ignore_index=True)
+X_valid = X_valid.append(X_valid_4, ignore_index=True)
+X_valid = X_valid.append(X_valid_4, ignore_index=True)
+
+X_valid = X_valid.reset_index(drop=True)
+
+X_train = X_train.iloc[0:45312]
+X_valid = X_valid.iloc[0:10404]
+
+
+
+
+
 
 candidate_config_list = []
-candidate_config_list.append(train_config(name = "cmp719_senet", IMG_HEIGHT = 256, IMG_WIDTH = 256, BATCH_SIZE = 4, EPOCHS=10))
+candidate_config_list.append(train_config(name = "cmp719_senet_regularization", IMG_HEIGHT = 256, IMG_WIDTH = 256, 
+                                        BATCH_SIZE = 12, EPOCHS=50,
+                                        LEARNING_RATE=4*(1e-5)))
 
 
 for conf in candidate_config_list : 
@@ -129,6 +178,7 @@ for conf in candidate_config_list :
     y_pred = (tf.argmax(y_pred,1)).numpy() #Convert prob to class label 0-5
     y_true = X_valid["diagnosis"].astype(np.int64)
     report = plot_confusion_matrix(y_true, y_pred, classes=[0, 1, 2, 3, 4], save=True, saveDir=log_dir)
+    report_perc = plot_confusion_matrix(y_true, y_pred, classes=[0, 1, 2, 3, 4], save=True, saveDir=log_dir, normalize=True, title='Confusio matrice percentage')
 
 
     #Visualize history

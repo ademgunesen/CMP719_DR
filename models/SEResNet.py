@@ -1,6 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras import layers, Sequential, Model
-
+from tensorflow.keras import layers, Sequential, Model, regularizers
 
 class BasicResidualSEBlock(layers.Layer):
 
@@ -11,13 +10,18 @@ class BasicResidualSEBlock(layers.Layer):
 
         self.residual = Sequential([
             layers.Conv2D(out_channels, (3, 3),
-                          strides=strides, padding='same'),
+                          strides=strides, padding='same',
+                          kernel_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01), 
+                          bias_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01)),
             layers.BatchNormalization(),
             layers.ReLU(),
             layers.Conv2D(out_channels * self.expansion,
-                          (3, 3), padding='same'),
+                          (3, 3), padding='same',
+                          kernel_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01), 
+                          bias_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01)),
             layers.BatchNormalization(),
             layers.ReLU()
+
         ])
 
         self.shortcut = Sequential()
@@ -99,7 +103,7 @@ class SEResNet(Model):
         self.in_channels = 64
 
         self.front = Sequential([
-            layers.Input(shape =  (256,256,3,),batch_size = 4),
+            layers.Input(shape =  (256,256,3,),batch_size = 12),
             layers.Conv2D(64, (3, 3), padding='same'),
             layers.BatchNormalization(),
             layers.ReLU()

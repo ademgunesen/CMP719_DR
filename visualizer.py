@@ -94,7 +94,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     plt.xlabel('Predicted label')
     plt.tight_layout()
     if(save):
-        plt.savefig(saveDir + 'confusionMatrix.png')
+        plt.savefig(saveDir + title+ '.png')
     plt.show(block=False)
     return report
 
