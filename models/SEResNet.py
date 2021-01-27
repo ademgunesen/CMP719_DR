@@ -11,14 +11,14 @@ class BasicResidualSEBlock(layers.Layer):
         self.residual = Sequential([
             layers.Conv2D(out_channels, (3, 3),
                           strides=strides, padding='same',
-                          kernel_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01), 
-                          bias_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01)),
+                          kernel_regularizer=regularizers.l1_l2(l1=0.001, l2=0.001), 
+                          bias_regularizer=regularizers.l1_l2(l1=0.001, l2=0.001)),
             layers.BatchNormalization(),
             layers.ReLU(),
             layers.Conv2D(out_channels * self.expansion,
                           (3, 3), padding='same',
-                          kernel_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01), 
-                          bias_regularizer=regularizers.l1_l2(l1=0.01, l2=0.01)),
+                          kernel_regularizer=regularizers.l1_l2(l1=0.001, l2=0.001), 
+                          bias_regularizer=regularizers.l1_l2(l1=0.001, l2=0.001)),
             layers.BatchNormalization(),
             layers.ReLU()
 
