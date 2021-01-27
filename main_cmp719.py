@@ -15,7 +15,9 @@ from visualizer import plot_history, plot_confusion_matrix, plot_loss_and_acc
 import utils as util
 from utils import train_config, make_log_dir, write_to_log, save_var, save_model, send_as_mail
 
-model = utils_cmp719.choose_nets('seresnet18', 5)
+from tensorflow.keras import layers
+
+model = utils_cmp719.choose_nets('inceptionv4', 5)
 
 comp_info = util.get_computer_info()
 
@@ -76,7 +78,7 @@ X_valid = X_valid.iloc[0:10404]
 
 
 candidate_config_list = []
-candidate_config_list.append(train_config(name = "cmp719_senet_regularization", IMG_HEIGHT = 256, IMG_WIDTH = 256, 
+candidate_config_list.append(train_config(name = "inceptionv4", IMG_HEIGHT = 256, IMG_WIDTH = 256, 
                                         BATCH_SIZE = 12, EPOCHS=50,
                                         LEARNING_RATE=4*(1e-5)))
 
@@ -125,17 +127,19 @@ for conf in candidate_config_list :
             shuffle=False)
 
     optimizer=tf.keras.optimizers.Adam(lr=conf.LEARNING_RATE)
+    
+    model.build(input_shape=(conf.BATCH_SIZE ,conf.IMG_HEIGHT, conf.IMG_WIDTH, 3))
     model.compile(
         loss='categorical_crossentropy',
         optimizer=optimizer,
         metrics=['accuracy']
         #metrics=[quadratic_kappa()]
     )
-    #inputs = Input(shape=(conf.IMG_HEIGHT, conf.IMG_WIDTH, 3,))
-    model.build(input_shape=(conf.BATCH_SIZE,conf.IMG_HEIGHT, conf.IMG_WIDTH, 3))
+    x = Input(shape =  (256,256,3,),batch_size = 12)
+    model(x)
     model.summary()
     #model.load_weights("model_cmp719_senet"+'.h5')
-    print("Loaded model from disk")
+    #print("Loaded model from disk")
     
     STEP_SIZE_TRAIN=train_generator.n//(train_generator.batch_size)
     STEP_SIZE_VALID=validation_generator.n//(validation_generator.batch_size)

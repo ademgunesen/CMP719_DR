@@ -20,10 +20,10 @@ class BasicConv2D(layers.Layer):
     
 
 class Inception_Stem(layers.Layer):
-    def __init__(self, input_shape=(32, 32, 3)):
+    def __init__(self, input_shape=(256, 256, 3)):
         super(Inception_Stem, self).__init__()
         self.conv1 = Sequential([
-            layers.Input(input_shape),
+            layers.Input(shape=  (256,256,3,),batch_size = 12),
             BasicConv2D(32, (3, 3)),
             BasicConv2D(32, (3, 3), padding='same'),
             BasicConv2D(64, (3, 3), padding='same')
@@ -251,7 +251,7 @@ class InceptionV4(Model):
                  A, B, C, 
                  k=192, l=224, 
                  m=256, n=384, 
-                 input_shape=(32, 32, 3)):
+                 input_shape=(12, 256, 256, 3)):
         super(InceptionV4, self).__init__()
 
         self.stem = Inception_Stem(input_shape)
@@ -265,6 +265,7 @@ class InceptionV4(Model):
         self.dropout = layers.Dropout(0.2)
         self.flat = layers.Flatten()
         self.fc = layers.Dense(num_classes, activation='softmax')
+        self.build(input_shape)
 
     def call(self, inputs, training=False):
         x = self.stem(inputs, training=False)
@@ -278,6 +279,14 @@ class InceptionV4(Model):
         x = self.flat(x)
         x = self.fc(x)
         return x
+
+    # def model(self):
+    #     x = layers.Input(shape=(256,256,3))
+    #     return Model(inputs=[x], outputs=self.call(x))
+    def summary(self):
+        x = layers.Input(shape=(256, 256, 3))
+        model = Model(inputs=[x], outputs=self.call(x))
+        return model.summary()
     
     @staticmethod
     def _generate_inception_module(out_channels, block_num, block):

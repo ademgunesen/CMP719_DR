@@ -9,7 +9,7 @@ def plot_history(history):
     plot_acc(history)
     plot_loss(history)
 
-def plot_loss_and_acc(history, save=False, saveDir='out/'):
+def plot_loss_and_acc(history, save=False, saveDir='out/', fname=''):
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex='col', figsize=(20, 18))
 
     ax1.plot(history['loss'], label='Train loss')
@@ -24,7 +24,7 @@ def plot_loss_and_acc(history, save=False, saveDir='out/'):
 
     plt.xlabel('Epochs')
     if(save):
-        plt.savefig(saveDir + 'loss_and_acc.png')
+        plt.savefig(saveDir + fname + 'loss_and_acc.png')
     plt.show(block=False)
 
 def plot_acc(history):

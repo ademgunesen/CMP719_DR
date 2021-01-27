@@ -41,7 +41,7 @@ class DenseNet(Model):
                  nblocks,
                  growth_rate=12,
                  reduction=0.5,
-                 input_shape=(32, 32, 3)):
+                 input_shape=(256, 256, 3)):
         super(DenseNet, self).__init__()
         self.growth_rate = growth_rate
         inner_channels = 2 * growth_rate
