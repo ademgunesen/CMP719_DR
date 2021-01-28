@@ -1,6 +1,8 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 import random
+import math
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.preprocessing import image
@@ -313,3 +315,18 @@ def get_computer_info():
     computer_info = json.load(f) 
     print("Working on "+computer_info['name'])
     return computer_info
+
+
+def show_images(images: list, titles: list="Untitled    ", colorScale='gray', rows = 0, columns = 0) -> None:
+    n: int = len(images)
+    if rows == 0:
+        rows=int(math.sqrt(n))
+    if columns == 0:
+        columns=(n/rows)
+    f = plt.figure()
+    for i in range(n):
+        # Debug, plot figure
+        f.add_subplot(rows, columns, i + 1)
+        plt.imshow(images[i], cmap=colorScale)
+        plt.title(titles[i])
+    plt.show(block=True)

@@ -1,4 +1,4 @@
-from configurators import train_config, generator_config
+from configurators import train_config, generator_config, dataset_config
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.layers import Input, Dense, Dropout, GlobalAveragePooling2D

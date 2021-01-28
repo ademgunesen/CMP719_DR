@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
+from configurators import train_config, generator_config, dataset_config
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
+import utils as util
 
 def plot_history(history):
     '''
@@ -103,3 +107,54 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 def show_data_stat(labelList, dataList):
     #Plot data distrubition on each class
 '''
+def visualise_batches(train_conf,generator_conf,dataset_conf, seed = 42):
+    X_train, X_valid, train_dest_path, valid_dest_path = dataset_conf.get_dataset()
+    log_dir = train_conf.log_dir
+    train_datagen = ImageDataGenerator(
+                        rotation_range      = generator_conf.rotation_range,
+                        #width_shift_range  = 0.1,
+                        #height_shift_range = 0.1,
+                        shear_range         = generator_conf.shear_range,
+                        zoom_range          = generator_conf.zoom_range,
+                        #channel_shift_range= 20,
+                        horizontal_flip     = generator_conf.horizontal_flip,
+                        vertical_flip       = generator_conf.vertical_flip,
+                        fill_mode           = generator_conf.fill_mode,
+                        rescale             = generator_conf.rescale)
+    test_datagen = ImageDataGenerator(rescale=generator_conf.rescale)
+
+    train_generator = train_datagen.flow_from_dataframe(
+            dataframe   =X_train,
+            directory   =train_dest_path,
+            x_col       ='id_code',
+            y_col       ='diagnosis',
+            target_size =(train_conf.IMG_HEIGHT, train_conf.IMG_WIDTH),
+            class_mode  ='categorical',
+            batch_size  =train_conf.BATCH_SIZE,
+            seed        =seed,
+            shuffle     =True)
+
+    validation_generator = test_datagen.flow_from_dataframe(
+            dataframe=X_valid,
+            directory=valid_dest_path,
+            x_col="id_code",
+            y_col="diagnosis",
+            target_size=(train_conf.IMG_HEIGHT, train_conf.IMG_WIDTH),
+            class_mode='categorical',
+            batch_size=train_conf.BATCH_SIZE,
+            seed=seed,
+            shuffle=False)
+
+    for i in range(3):
+        batch = train_generator.next()
+        util.show_images([batch[0][0],batch[0][1],batch[0][2],batch[0][3]])
+
+if __name__ == "__main__":
+
+    t_conf = train_config(name = "Esma",
+                    BATCH_SIZE = 12, 
+                    EPOCHS=5)
+
+    g_conf = generator_config(name = "default")
+    d_conf = dataset_config(name = "default")
+    visualise_batches(t_conf,g_conf,d_conf)
