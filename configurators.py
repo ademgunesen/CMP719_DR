@@ -117,15 +117,15 @@ class train_config:
 class generator_config:
 
     def __init__(self,  name= "default_config",
-                        rotation_range=360,
-                        width_shift_range=0,
-                        height_shift_range=0,
-                        shear_range=0.1,
+                        rotation_range=20,
+                        width_shift_range=0.05,
+                        height_shift_range=0.05,
+                        shear_range=0,
                         zoom_range=0.1,
                         channel_shift_range=0,
                         horizontal_flip=True,
                         vertical_flip=True,
-                        fill_mode = "nearest",
+                        fill_mode = "constant",
                         rescale=1./255,
                         log_dir = ''
         ):
