@@ -23,13 +23,13 @@ from tensorflow.keras import layers
 
 comp_info = util.get_computer_info()
 
-HP_LR = hp.HParam('learning_rate', hp.Discrete([1e-2,1e-3,1e-4,1e-5]))
+HP_LR = hp.HParam('learning_rate', hp.Discrete([1e-3,5e-4,1e-4]))
 METRIC_ACCURACY = 'accuracy'
 
 def train_test_model(hparams) : 
     t_conf = train_config(name = "Esma",
                         BATCH_SIZE = 12, 
-                        EPOCHS=5, 
+                        EPOCHS=200, 
                         LEARNING_RATE = hparams[HP_LR])
 
     g_conf = generator_config(name = "default")
@@ -40,7 +40,7 @@ def train_test_model(hparams) :
     g_conf.save(save_dir = log_dir)
     d_conf.save(save_dir = log_dir)
 
-    with tf.summary.create_file_writer('logs/fit8').as_default():
+    with tf.summary.create_file_writer('logs/fit10').as_default():
         hp.hparams_config(
         hparams=[HP_LR],
         metrics=[hp.Metric(METRIC_ACCURACY, display_name='Accuracy')],
@@ -70,5 +70,5 @@ for learning_rate in HP_LR.domain.values:
     run_name = "run-%d" % session_num
     print('--- Starting trial: %s' % run_name)
     print({h.name: hparams[h] for h in hparams})
-    run('logs/fit8/' + run_name, hparams)
+    run('logs/fit10/' + run_name, hparams)
     session_num += 1

@@ -59,10 +59,11 @@ def train_model(model, train_conf,generator_conf,dataset_conf,optimizer, seed = 
     model.summary()
     weights_dir = make_subfolder("Weights", log_dir)
     my_filepath = weights_dir + 'weights-improvement-{epoch:02d}.hdf5'
-    callback = tf.keras.callbacks.ModelCheckpoint(
+    cp = tf.keras.callbacks.ModelCheckpoint(
         filepath=my_filepath,
         save_freq='epoch'
     )
+    es = EarlyStopping(monitor='val_loss', patience = train_conf.ES_PATIENCE)
 
     model.compile(
         optimizer=optimizer,
@@ -83,7 +84,7 @@ def train_model(model, train_conf,generator_conf,dataset_conf,optimizer, seed = 
                     validation_steps=STEP_SIZE_VALID,
                     validation_data=validation_generator,
                     #class_weight=[0.4, 25., 3, 33., 38.],
-                    callbacks=[callback]
+                    callbacks=[cp,es]
                     ).history
     elapsed_time = time.time() - start_time
     pretrain_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))

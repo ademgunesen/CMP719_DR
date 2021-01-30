@@ -15,7 +15,7 @@ class train_config:
                         WARMUP_EPOCHS = 5,
                         LEARNING_RATE = 4*(1e-4),
                         WARMUP_LEARNING_RATE = 4*(1e-3),
-                        ES_PATIENCE = 5,
+                        ES_PATIENCE = 10,
                         RLROP_PATIENCE = 3,
                         DECAY_DROP = 0.5,
                         CLASS_WEIGHT = [1., 1., 1., 1. ,1.],
@@ -239,22 +239,44 @@ class dataset_config:
         X_valid = fold_df[fold_df['fold_0'] == 'validation']
         X_valid = X_valid.reset_index(drop=True)
 
-        X_train_0_num = len(pd.DataFrame(X_train[X_train['diagnosis'] == '0']))
-        X_train_1_num = len(pd.DataFrame(X_train[X_train['diagnosis'] == '1']))
-        X_train_2_num = len(pd.DataFrame(X_train[X_train['diagnosis'] == '2']))
-        X_train_3_num = len(pd.DataFrame(X_train[X_train['diagnosis'] == '3']))
-        X_train_4_num = len(pd.DataFrame(X_train[X_train['diagnosis'] == '4']))
+        X_train_0 = pd.DataFrame(X_train[X_train['diagnosis'] == '0'])
+        X_train_1 = pd.DataFrame(X_train[X_train['diagnosis'] == '1'])
+        X_train_2 = pd.DataFrame(X_train[X_train['diagnosis'] == '2'])
+        X_train_3 = pd.DataFrame(X_train[X_train['diagnosis'] == '3'])
+        X_train_4 = pd.DataFrame(X_train[X_train['diagnosis'] == '4'])
 
-        X_valid_0_num = len(pd.DataFrame(X_valid[X_valid['diagnosis'] == '0']))
-        X_valid_1_num = len(pd.DataFrame(X_valid[X_valid['diagnosis'] == '1']))
-        X_valid_2_num = len(pd.DataFrame(X_valid[X_valid['diagnosis'] == '2']))
-        X_valid_3_num = len(pd.DataFrame(X_valid[X_valid['diagnosis'] == '3']))
-        X_valid_4_num = len(pd.DataFrame(X_valid[X_valid['diagnosis'] == '4']))
+        X_valid_0 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '0'])
+        X_valid_1 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '1'])
+        X_valid_2 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '2'])
+        X_valid_3 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '3'])
+        X_valid_4 = pd.DataFrame(X_valid[X_valid['diagnosis'] == '4'])
 
         print("Distribution of training set:")
-        print(X_train_0_num,X_train_1_num,X_train_2_num,X_train_3_num,X_train_4_num)
+        print(len(X_train_0),len(X_train_1),len(X_train_2),len(X_train_3),len(X_train_4))
         print("Distribution of validation set:")
-        print(X_valid_0_num,X_valid_1_num,X_valid_2_num,X_valid_3_num,X_valid_4_num)
-        X_train = X_train.iloc[0:9912]
-        X_valid = X_valid.iloc[0:2472]
+        print(len(X_valid_0),len(X_valid_1),len(X_valid_2),len(X_valid_3),len(X_valid_4))
+        X_train = X_train.append(X_train_1, ignore_index=True)
+        X_train = X_train.append(X_train_3, ignore_index=True)
+        X_train = X_train.append(X_train_3, ignore_index=True)
+        X_train = X_train.append(X_train_3, ignore_index=True)
+        X_train = X_train.append(X_train_3, ignore_index=True)
+        X_train = X_train.append(X_train_4, ignore_index=True)
+        X_train = X_train.append(X_train_4, ignore_index=True)
+        X_train = X_train.append(X_train_4, ignore_index=True)
+        X_train = X_train.append(X_train_4, ignore_index=True)
+        #17132
+
+        X_valid = X_valid.append(X_valid_1, ignore_index=True)
+        X_valid = X_valid.append(X_valid_3, ignore_index=True)
+        X_valid = X_valid.append(X_valid_3, ignore_index=True)
+        X_valid = X_valid.append(X_valid_3, ignore_index=True)
+        X_valid = X_valid.append(X_valid_3, ignore_index=True)
+        X_valid = X_valid.append(X_valid_4, ignore_index=True)
+        X_valid = X_valid.append(X_valid_4, ignore_index=True)
+        X_valid = X_valid.append(X_valid_4, ignore_index=True)
+        X_valid = X_valid.append(X_valid_4, ignore_index=True)
+        #4285
+
+        X_train = X_train.iloc[0:17124]
+        X_valid = X_valid.iloc[0:4284]
         return X_train, X_valid, train_dest_path, valid_dest_path
