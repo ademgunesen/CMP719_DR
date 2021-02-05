@@ -23,13 +23,13 @@ from tensorflow.keras import layers
 
 comp_info = util.get_computer_info()
 
-HP_LR = hp.HParam('learning_rate', hp.Discrete([1e-3,5e-4,1e-4]))
+HP_LR = hp.HParam('learning_rate', hp.Discrete([5e-2]))
 METRIC_ACCURACY = 'accuracy'
 
 def train_test_model(hparams) : 
     t_conf = train_config(name = "Esma",
-                        BATCH_SIZE = 12, 
-                        EPOCHS=200, 
+                        BATCH_SIZE = 20, 
+                        EPOCHS=30, 
                         LEARNING_RATE = hparams[HP_LR])
 
     g_conf = generator_config(name = "default")
@@ -48,7 +48,7 @@ def train_test_model(hparams) :
     
     optimizer=tf.keras.optimizers.SGD(lr=t_conf.LEARNING_RATE)
     
-    model = utils_cmp719.choose_nets('seresnet18', 5)
+    model = utils_cmp719.choose_nets('densenet121', 5)
     model.build(input_shape=(t_conf.BATCH_SIZE ,t_conf.IMG_HEIGHT, t_conf.IMG_WIDTH, 3))
     model, history = train_model(model,t_conf,g_conf,d_conf,optimizer)
     accuracy = evaluate_model(model,t_conf,g_conf,d_conf)
