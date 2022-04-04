@@ -1,2 +1,2 @@
 # CMP719_DR
-My school project
+My MSc course project
